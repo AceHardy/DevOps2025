@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # MACHINE DB
+  config.vm.define "db-server" do |db|
+    db.vm.box = "bento/debian-13"
+    db.vm.hostname = "db-server"
+    db.vm.network "private_network", ip: "192.168.56.11"
+    db.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    db.vm.provision "shell", path:"Provision.sh"
+    db.vm.synced_folder "./db_sql", "/vagrant/db_sql"
+  end
+
+  # MACHINE WEB
+  config.vm.define "web-server" do |web|
+    web.vm.box = "bento/debian-13"
+    web.vm.hostname = "web-server"
+    web.vm.network "private_network", ip: "192.168.56.10"
+    web.vm.network "forwarded_port", guest: 80, host: 8080
+    web.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 1
+    
+    end
+    web.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y apache2 php libapache2-mod-php php-mysql
+      systemctl enable apache2
+      systemctl restart apache2
+      rm -f /var/www/html/index.html
+ 
+      cat << 'EOF' > /var/www/html/index.php
+      <?php
+      $mysqli = new mysqli("192.168.56.11", "tp_user", "tp_password", "tp_db");
+      if ($mysqli->connect_errno) {
+          echo "<h1 style='color:red'>Échec connexion DB : " . $mysqli->connect_error . "</h1>";
+      } else {
+          echo "<h1 style='color:green'>Connexion à la base de données réussie !</h1>";
+      }
+      ?>
+EOF
+      chown www-data:www-data /var/www/html/index.php
+    SHELL
+
+      web.vm.synced_folder "./shared", "/var/www/html",
+         create: true,    
+         owner: "www-data",
+         group: "www-data",
+         mount_options: ["dmode=755,fmode=644"]
+
+  end
+end

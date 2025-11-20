@@ -1,0 +1,12 @@
+Log created: 2025-11-19T15:12:58.471967000Z
+Process ID:  9614 (0x258e)
+Parent PID:  1546 (0x60a)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: debian-base
+Arg[3]: --startvm
+Arg[4]: 60813b96-fa07-4dba-8c54-c775a01e3c79
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2

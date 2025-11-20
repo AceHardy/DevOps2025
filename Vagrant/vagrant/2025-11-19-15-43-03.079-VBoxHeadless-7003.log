@@ -1,0 +1,12 @@
+Log created: 2025-11-19T15:43:03.797699000Z
+Process ID:  7003 (0x1b5b)
+Parent PID:  1561 (0x619)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: debian-base
+Arg[3]: --startvm
+Arg[4]: 6ce6f4f0-f2ed-4dee-a529-93187113bd72
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2
